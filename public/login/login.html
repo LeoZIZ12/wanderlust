@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wanderlust — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../style.css"/>
+  <style>
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+    }
+    .login-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    @media (max-width: 480px) {
+      .login-box { padding: 1.75rem 1.25rem; }
+    }
+    .login-box h1 {
+      font-family: 'Playfair Display', serif;
+      color: var(--white);
+      font-size: 1.8rem;
+      margin-bottom: 0.4rem;
+    }
+    .login-box p {
+      color: var(--muted);
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+    }
+    .field {
+      margin-bottom: 1rem;
+    }
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .field input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .field input:focus { border-color: var(--accent); }
+    .btn-login {
+      width: 100%;
+      background: var(--accent);
+      color: #0f1117;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: opacity 0.2s;
+    }
+    .btn-login:hover { opacity: 0.85; }
+    .error {
+      color: #e05c5c;
+      font-size: 0.82rem;
+      margin-top: 0.75rem;
+      text-align: center;
+      min-height: 1.2rem;
+    }
+    .toggle-cadastro {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .toggle-cadastro a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .toggle-cadastro a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-box">
+      <h1>Wander<span style="color:var(--white)">lust</span></h1>
+      <p id="subtitulo">Entre com sua conta para continuar</p>
+      <div class="field" id="campo-nome" style="display:none;">
+        <label>Nome</label>
+        <input type="text" id="nome" placeholder="Seu nome"/>
+      </div>
+      <div class="field">
+        <label>E-mail</label>
+        <input type="email" id="email" placeholder="seu@email.com"/>
+      </div>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" id="senha" placeholder="••••••"/>
+      </div>
+      <div class="field" id="campo-confirmar-senha" style="display:none;">
+        <label>Confirmar Senha</label>
+        <input type="password" id="confirmar-senha" placeholder="••••••"/>
+      </div>
+      <button class="btn-login" id="btn-submit" onclick="onSubmit()">Entrar</button>
+      <div class="error" id="erro"></div>
+      <p class="toggle-cadastro">
+        <span id="toggle-texto">Não tem conta?</span>
+        <a href="#" id="toggle-link">Criar conta</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    if (sessionStorage.getItem('usuario')) {
+      window.location.href = '../home/index.html';
+    }
+
+    let modoCadastro = false;
+
+    function onSubmit() {
+      if (modoCadastro) cadastrar();
+      else login();
+    }
+
+    function alternarModo(e) {
+      e.preventDefault();
+      modoCadastro = !modoCadastro;
+      document.getElementById('erro').textContent = '';
+      document.getElementById('campo-nome').style.display = modoCadastro ? 'block' : 'none';
+      document.getElementById('campo-confirmar-senha').style.display = modoCadastro ? 'block' : 'none';
+      document.getElementById('subtitulo').textContent = modoCadastro
+        ? 'Crie sua conta para começar'
+        : 'Entre com sua conta para continuar';
+      document.getElementById('btn-submit').textContent = modoCadastro ? 'Cadastrar' : 'Entrar';
+      document.getElementById('toggle-texto').textContent = modoCadastro ? 'Já tem conta?' : 'Não tem conta?';
+      document.getElementById('toggle-link').textContent = modoCadastro ? 'Entrar' : 'Criar conta';
+    }
+
+    document.getElementById('toggle-link').addEventListener('click', alternarModo);
+
+    async function login() {
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value.trim();
+      const erro = document.getElementById('erro');
+      erro.textContent = '';
+
+      if (!email || !senha) {
+        erro.textContent = 'Preencha todos os campos.';
+        return;
+      }
+
+      try {
+        const res = await fetch(`http://localhost:3000/usuarios?email=${email}`);
+        const usuarios = await res.json();
+
+        if (usuarios.length === 0 || usuarios[0].senha !== senha) {
+          erro.textContent = 'E-mail ou senha incorretos.';
+          return;
+        }
+
+        sessionStorage.setItem('usuario', JSON.stringify(usuarios[0]));
+        window.location.href = '../home/index.html';
+      } catch (e) {
+        erro.textContent = 'Erro ao conectar com o servidor.';
+      }
+    }
+
+    async function cadastrar() {
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value.trim();
+      const confirmarSenha = document.getElementById('confirmar-senha').value.trim();
+      const erro = document.getElementById('erro');
+      erro.textContent = '';
+
+      if (!nome || !email || !senha || !confirmarSenha) {
+        erro.textContent = 'Preencha todos os campos.';
+        return;
+      }
+
+      if (senha !== confirmarSenha) {
+        erro.textContent = 'As senhas não coincidem.';
+        return;
+      }
+
+      try {
+        const resCheck = await fetch(`http://localhost:3000/usuarios?email=${email}`);
+        const existentes = await resCheck.json();
+
+        if (existentes.length > 0) {
+          erro.textContent = 'Este e-mail já está cadastrado.';
+          return;
+        }
+
+        const res = await fetch('http://localhost:3000/usuarios', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome, email, senha, favoritos: [] })
+        });
+
+        if (!res.ok) throw new Error('Falha ao cadastrar');
+
+        const novoUsuario = await res.json();
+        sessionStorage.setItem('usuario', JSON.stringify(novoUsuario));
+        window.location.href = '../home/index.html';
+      } catch (e) {
+        erro.textContent = 'Erro ao conectar com o servidor.';
+      }
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') onSubmit();
+    });
+  </script>
+</body>
+</html>

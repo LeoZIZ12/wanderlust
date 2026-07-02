@@ -1,0 +1,270 @@
+{
+  "usuarios": [
+    {
+      "nome": "adm",
+      "id": "1",
+      "email": "adm@gmail.com",
+      "senha": "123",
+      "adm": true,
+      "favoritos": []
+    },
+    {
+      "nome": "leo",
+      "id": "2",
+      "email": "leo@gmail.com",
+      "senha": "123",
+      "adm": false,
+      "favoritos": [
+        "2",
+        "3",
+        "1",
+        "4",
+        "5",
+        "6",
+        "7",
+        "10",
+        "12",
+        "15",
+        "20",
+        "16"
+      ]
+    },
+    {
+      "nome": "teste",
+      "email": "teste@gmail.com",
+      "senha": "123",
+      "favoritos": [],
+      "id": "Nm0E3qnu3SU"
+    },
+    {
+      "nome": "teste",
+      "email": "teste1@gmail.com",
+      "senha": "123",
+      "favoritos": [],
+      "id": "aoE2kD__kQ4"
+    }
+  ],
+  "pontos_turisticos": [
+    {
+      "id": "1",
+      "nome": "Torre Eiffel",
+      "cidade": "Paris",
+      "pais": "França",
+      "continente": "Europa",
+      "categoria": "Monumento",
+      "descricao": "Icônico monumento de ferro forjado construído em 1889, símbolo de Paris e da França.",
+      "avaliacao": 4.8,
+      "imagem": "https://cdn.pixabay.com/photo/2018/04/25/09/26/eiffel-tower-3349075_1280.jpg"
+    },
+    {
+      "id": "2",
+      "nome": "Machu Picchu",
+      "cidade": "Cusco",
+      "pais": "Peru",
+      "continente": "América do Sul",
+      "descricao": "Antiga cidade inca localizada no alto dos Andes, Patrimônio Mundial da UNESCO.",
+      "categoria": "Sítio Histórico",
+      "avaliacao": 4.9,
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Machu_Picchu%2C_Peru.jpg/1280px-Machu_Picchu%2C_Peru.jpg"
+    },
+    {
+      "id": "3",
+      "nome": "Cristo Redentor",
+      "cidade": "Rio de Janeiro",
+      "pais": "Brasil",
+      "continente": "América do Sul",
+      "descricao": "Estátua icônica do Cristo no topo do Corcovado, uma das Sete Maravilhas do Mundo Moderno.",
+      "categoria": "Monumento",
+      "avaliacao": 4.8,
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Rio_de_Janeiro_-_Cristo_Redentor_01.jpg"
+    },
+    {
+      "id": "4",
+      "nome": "Coliseu",
+      "cidade": "Roma",
+      "pais": "Itália",
+      "continente": "Europa",
+      "descricao": "Anfiteatro romano do século I, o maior já construído, capaz de abrigar 80 mil espectadores.",
+      "categoria": "Sítio Histórico",
+      "avaliacao": 4.7,
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/1280px-Colosseo_2020.jpg"
+    },
+    {
+      "id": "5",
+      "nome": "Grande Muralha da China",
+      "cidade": "Pequim",
+      "pais": "China",
+      "continente": "Ásia",
+      "descricao": "Estrutura de defesa histórica que se estende por mais de 21 mil km pelo norte da China.",
+      "categoria": "Sítio Histórico",
+      "avaliacao": 4.8,
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/1280px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg"
+    },
+    {
+      "id": "6",
+      "nome": "Taj Mahal",
+      "cidade": "Agra",
+      "pais": "Índia",
+      "continente": "Ásia",
+      "descricao": "Mausoléu de mármore branco construído no século XVII, considerado uma das obras-primas da arquitetura mundial.",
+      "categoria": "Monumento",
+      "avaliacao": 4.9,
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Taj_Mahal%2C_Agra%2C_India_edit3.jpg/1280px-Taj_Mahal%2C_Agra%2C_India_edit3.jpg"
+    },
+    {
+      "id": "7",
+      "nome": "Pirâmides de Gizé",
+      "cidade": "Cairo",
+      "pais": "Egito",
+      "continente": "África",
+      "descricao": "Complexo funerário do Antigo Egito com mais de 4.500 anos, única das Sete Maravilhas do Mundo Antigo ainda de pé.",
+      "categoria": "Sítio Histórico",
+      "avaliacao": 4.8,
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Kheops-Pyramid.jpg/1280px-Kheops-Pyramid.jpg"
+    },
+    {
+      "id": "8",
+      "nome": "Stonehenge",
+      "cidade": "Wiltshire",
+      "pais": "Reino Unido",
+      "continente": "Europa",
+      "descricao": "Monumento pré-histórico de pedras com cerca de 5.000 anos, de origem e propósito ainda debatidos.",
+      "categoria": "Sítio Histórico",
+      "avaliacao": 4.5,
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Stonehenge2007_07_30.jpg/1280px-Stonehenge2007_07_30.jpg"
+    },
+    {
+      "id": "9",
+      "nome": "Angkor Wat",
+      "cidade": "Siem Reap",
+      "pais": "Camboja",
+      "continente": "Ásia",
+      "descricao": "Maior complexo religioso do mundo, construído no século XII, original templo hindu convertido ao budismo.",
+      "categoria": "Templo",
+      "avaliacao": 4.9,
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Angkor_Wat.jpg/960px-Angkor_Wat.jpg"
+    },
+    {
+      "id": "10",
+      "nome": "Petra",
+      "cidade": "Ma'an",
+      "pais": "Jordânia",
+      "continente": "Ásia",
+      "descricao": "Cidade arqueológica esculpida na rocha pelos nabateus, conhecida como a Cidade Rosa.",
+      "categoria": "Sítio Histórico",
+      "avaliacao": 4.8,
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/b/b7/The_Monastery%2C_Petra%2C_Jordan8.jpg"
+    },
+    {
+      "id": "11",
+      "nome": "Cataratas do Iguaçu",
+      "cidade": "Foz do Iguaçu",
+      "pais": "Brasil / Argentina",
+      "continente": "América do Sul",
+      "descricao": "Sistema de 275 quedas d'água na fronteira entre Brasil e Argentina, Patrimônio Natural da UNESCO.",
+      "categoria": "Natureza",
+      "avaliacao": 4.9,
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Cataratas_do_igua%C3%A7u_por_do_sol.jpg"
+    },
+    {
+      "id": "12",
+      "nome": "Sagrada Família",
+      "cidade": "Barcelona",
+      "pais": "Espanha",
+      "continente": "Europa",
+      "descricao": "Basílica modernista projetada por Antoni Gaudí, em construção desde 1882 e ainda inacabada.",
+      "categoria": "Igreja",
+      "avaliacao": 4.8,
+      "imagem": "https://media.istockphoto.com/id/509628540/pt/foto/sagrada-fam%C3%ADlia-em-barcelona-a-espanha.jpg?s=612x612&w=0&k=20&c=yTymyi4zXQSno8pTfNfnL-SVEnmvQEBL8DHBoZjew_w="
+    },
+    {
+      "id": "13",
+      "nome": "Grand Canyon",
+      "cidade": "Arizona",
+      "pais": "Estados Unidos",
+      "continente": "América do Norte",
+      "descricao": "Cânion esculpido pelo Rio Colorado com 446 km de extensão e até 1,8 km de profundidade.",
+      "categoria": "Natureza",
+      "avaliacao": 4.9,
+      "imagem": "https://www.flipar.com.br/wp-content/uploads/2025/01/02-Canion.jpg"
+    },
+    {
+      "id": "14",
+      "nome": "Opera House de Sydney",
+      "cidade": "Sydney",
+      "pais": "Austrália",
+      "continente": "Oceania",
+      "descricao": "Ícone arquitetônico do século XX, inaugurado em 1973, reconhecido Patrimônio Mundial da UNESCO.",
+      "categoria": "Monumento",
+      "avaliacao": 4.7,
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Sydney_Australia._%2821339175489%29.jpg/1280px-Sydney_Australia._%2821339175489%29.jpg"
+    },
+    {
+      "id": "15",
+      "nome": "Acrópole de Atenas",
+      "cidade": "Atenas",
+      "pais": "Grécia",
+      "continente": "Europa",
+      "descricao": "Cidadela antiga com o Partenon, templo dedicado à deusa Atena, símbolo da civilização ocidental.",
+      "categoria": "Sítio Histórico",
+      "avaliacao": 4.7,
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/The_Parthenon_in_Athens.jpg/1280px-The_Parthenon_in_Athens.jpg"
+    },
+    {
+      "id": "16",
+      "nome": "Monte Fuji",
+      "cidade": "Honshu",
+      "pais": "Japão",
+      "continente": "Ásia",
+      "descricao": "Vulcão e ponto mais alto do Japão com 3.776 m, símbolo nacional e Patrimônio Cultural da UNESCO.",
+      "categoria": "Natureza",
+      "avaliacao": 4.8,
+      "imagem": "https://media.istockphoto.com/id/1192780580/pt/foto/fuji-mountain-red-maple-tree-and-fisherman-boat-with-morning-mist-in-autumn-kawaguchiko-lake.jpg?s=612x612&w=0&k=20&c=cBxGkmxJWgXf2iw_8kiNVVo0ve-jZs8xFEqrgHa5izo="
+    },
+    {
+      "id": "17",
+      "nome": "Aurora Boreal",
+      "cidade": "Tromsø",
+      "pais": "Noruega",
+      "continente": "Europa",
+      "descricao": "Fenômeno natural de luzes coloridas no céu noturno do Ártico, visível entre setembro e março.",
+      "categoria": "Natureza",
+      "avaliacao": 5,
+      "imagem": "https://images.unsplash.com/photo-1475518845976-0fd87b7e4e5d?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE3fHx8ZW58MHx8fHx8"
+    },
+    {
+      "id": "18",
+      "nome": "Palácio de Versalhes",
+      "cidade": "Versalhes",
+      "pais": "França",
+      "continente": "Europa",
+      "descricao": "Grandioso palácio real do século XVII com jardins à francesa, residência dos reis da França.",
+      "categoria": "Palácio",
+      "avaliacao": 4.7,
+      "imagem": "https://midias-turismo.eurodicas.com.br/wp-content/uploads/2025/10/palacio-de-versalhes.jpg.webp"
+    },
+    {
+      "id": "19",
+      "nome": "Chapada Diamantina",
+      "cidade": "Lençóis",
+      "pais": "Brasil",
+      "continente": "América do Sul",
+      "descricao": "Parque nacional com cachoeiras, grutas e formações rochosas únicas no coração da Bahia.",
+      "categoria": "Natureza",
+      "avaliacao": 4.8,
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Chapada_diamantina..jpg"
+    },
+    {
+      "id": "20",
+      "nome": "Chichén Itzá",
+      "cidade": "Yucatán",
+      "pais": "México",
+      "continente": "América do Norte",
+      "descricao": "Antiga cidade maia com a Pirâmide de Kukulcán, uma das Sete Maravilhas do Mundo Moderno.",
+      "categoria": "Sítio Histórico",
+      "avaliacao": 4.8,
+      "imagem": "https://media.istockphoto.com/id/481272289/pt/foto/templo-de-el-castillo-de-chichen-itz%C3%A1-ao-p%C3%B4r-do-sol-m%C3%A9xico.jpg?s=612x612&w=0&k=20&c=zLQeOdC8GyqFBkl9vJ1X4EJbpwBtBxhDGgAveH-gicg="
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wanderlust — Pontos Turísticos do Mundo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    .btn-criar-ponto {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-criar-ponto:hover { background: var(--accent-dim); }
+
+    .btn-criar-ponto svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .btn-criar-ponto.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-criar-ponto.disabled:hover { background: transparent; }
+
+    @media (max-width: 560px) {
+      .btn-criar-ponto { font-size: 0.8rem; padding: 0.4rem 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html"><div class="logo">Wander<span>lust</span></div></a>
+    <div class="header-right">
+      <span class="greeting">Olá, <strong>Usuário</strong> 👋</span>
+      <button class="btn-criar-ponto" id="btn-abrir-modal-criar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Criar Ponto Turístico
+      </button>
+      <a href="../mapa/mapa.html" class="btn-map">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+          <line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>
+        </svg>
+        Mapa
+      </a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Explore os melhores<br/>destinos do <em>mundo</em></h1>
+    <p>Descubra monumentos, maravilhas naturais e sítios históricos em todos os continentes.</p>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input id="search" type="text" placeholder="Buscar por nome, país ou cidade..."/>
+    </div>
+  </section>
+
+  <div class="section-label">Destaques</div>
+
+  <div id="carouselDestaques" class="carousel slide carousel-destaques">
+    <div class="carousel-indicators" id="carousel-indicators"></div>
+    <div class="carousel-inner" id="carousel-inner"></div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselDestaques" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselDestaques" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Próximo</span>
+    </button>
+  </div>
+
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="Todos">Todos</button>
+  </div>
+
+  <div class="section-label" id="count"></div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="modal-overlay" id="modal-criar-ponto">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Criar Ponto Turístico</h2>
+        <button class="modal-close" id="btn-fechar-modal-criar">&times;</button>
+      </div>
+      <form id="form-criar-ponto">
+        <div class="field">
+          <label>Nome</label>
+          <input type="text" id="ponto-nome" placeholder="Ex: Torre Eiffel"/>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Cidade</label>
+            <input type="text" id="ponto-cidade" placeholder="Ex: Paris"/>
+          </div>
+          <div class="field">
+            <label>País</label>
+            <input type="text" id="ponto-pais" placeholder="Ex: França"/>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Continente</label>
+            <select id="ponto-continente">
+              <option value="">Selecione...</option>
+              <option>África</option>
+              <option>América do Norte</option>
+              <option>América do Sul</option>
+              <option>Ásia</option>
+              <option>Europa</option>
+              <option>Oceania</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Categoria</label>
+            <select id="ponto-categoria">
+              <option value="">Selecione...</option>
+              <option>Monumento</option>
+              <option>Sítio Histórico</option>
+              <option>Templo</option>
+              <option>Igreja</option>
+              <option>Palácio</option>
+              <option>Natureza</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Descrição</label>
+          <textarea id="ponto-descricao" placeholder="Descreva o ponto turístico..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Avaliação (0 a 5)</label>
+            <input type="number" id="ponto-avaliacao" min="0" max="5" step="0.1" placeholder="Ex: 4.8"/>
+          </div>
+          <div class="field">
+            <label>URL da Imagem</label>
+            <input type="text" id="ponto-imagem" placeholder="https://..."/>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancelar" id="btn-cancelar-criar">Cancelar</button>
+          <button type="submit" class="btn-salvar">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-avatar-wrap">
+        <img class="footer-avatar" src="../assets/img/leonardo.jpg" alt="Foto de Leonardo Martins Macedo"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/>
+        <div class="footer-avatar-fallback">LM</div>
+      </div>
+      <div class="footer-info">
+        <h3 class="footer-name">Leonardo Martins Macedo</h3>
+        <p class="footer-bio">Estudante de Eng. Software PUC MINAS</p>
+        <div class="footer-meta">
+          <span><strong>Curso:</strong> ENGENHARIA DE SOFTWARE</span>
+        </div>
+        <div class="footer-social">
+          <a href="https://github.com/LeoZIZ12" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>
+            </svg>
+          </a>
+          <a href="https://www.linkedin.com/in/leoziz-036969401 " target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4V8h4v1.5A5 5 0 0 1 16 8z"/>
+              <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/_leomartins_007/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5"/>
+              <circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/>
+            </svg>
+          </a>
+          <a href="leo.euricobete@gmail.com" aria-label="E-mail" title="E-mail">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copy">© 2026 Wanderlust — Trabalho Prático DIW</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

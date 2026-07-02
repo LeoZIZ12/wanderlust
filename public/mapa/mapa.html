@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wanderlust — Mapa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet"/>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #181c27;
+      --card: #1e2330;
+      --border: #2a2f42;
+      --accent: #c9a84c;
+      --accent-dim: rgba(201,168,76,0.12);
+      --text: #e8e8e8;
+      --muted: #7a8099;
+      --white: #ffffff;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      z-index: 200;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+    .logo span { color: var(--white); }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-back {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.875rem;
+      font-family: 'Inter', sans-serif;
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-back:hover { border-color: var(--accent); color: var(--accent); }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding: 0 0.5rem;
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--muted);
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    .status-dot.loading { background: var(--accent); animation: pulse 1s infinite; }
+    .status-dot.done { background: #4caf7d; }
+    .status-dot.error { background: #e05c5c; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Mapa */
+    #map {
+      flex: 1;
+      width: 100%;
+    }
+
+    /* Popup customizado */
+    .mapboxgl-popup-content {
+      background: var(--card) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 12px !important;
+      padding: 0 !important;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+      min-width: 220px;
+      max-width: 260px;
+      overflow: hidden;
+    }
+    .mapboxgl-popup-tip { display: none !important; }
+    .mapboxgl-popup-close-button {
+      color: var(--muted) !important;
+      font-size: 1.1rem !important;
+      padding: 0.4rem 0.6rem !important;
+      right: 4px !important;
+      top: 4px !important;
+      background: transparent !important;
+    }
+    .mapboxgl-popup-close-button:hover { color: var(--white) !important; }
+
+    .popup-img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      display: block;
+      background: var(--border);
+    }
+    .popup-body { padding: 0.85rem 1rem 1rem; }
+    .popup-cat {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+    .popup-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.2rem;
+    }
+    .popup-location {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .popup-desc {
+      font-size: 0.76rem;
+      color: var(--muted);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 0.6rem;
+    }
+    .popup-stars {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Marcador customizado */
+    .marker {
+      width: 32px;
+      height: 32px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      border: 2px solid var(--accent);
+      background: var(--card);
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .marker:hover {
+      background: var(--accent);
+      transform: rotate(-45deg) scale(1.2);
+    }
+    .marker-user {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #4a9eff;
+      border: 3px solid var(--white);
+      box-shadow: 0 0 0 4px rgba(74,158,255,0.3);
+    }
+
+    /* Legenda */
+    .legend {
+      position: absolute;
+      bottom: 2rem;
+      left: 1.5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .legend-title {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.1rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text);
+    }
+    .legend-pin {
+      width: 14px;
+      height: 14px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      border: 1.5px solid var(--accent);
+      background: var(--card);
+      flex-shrink: 0;
+    }
+    .legend-user {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #4a9eff;
+      border: 2px solid var(--white);
+      flex-shrink: 0;
+    }
+
+    /* Contador de pontos carregados */
+    .map-counter {
+      position: absolute;
+      top: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.35rem 1rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      z-index: 10;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .map-counter span { color: var(--accent); font-weight: 600; }
+
+    @media (max-width: 600px) {
+      header { padding: 0 1rem; height: auto; min-height: 60px; flex-wrap: wrap; gap: 0.5rem; padding-top: 0.6rem; padding-bottom: 0.6rem; }
+      .header-right { width: 100%; justify-content: space-between; gap: 0.5rem; }
+      .status-bar span { display: none; }
+      .btn-back { font-size: 0.8rem; padding: 0.4rem 0.85rem; }
+      .legend { left: 0.75rem; bottom: 1rem; padding: 0.6rem 0.8rem; font-size: 0.7rem; }
+      .map-counter { font-size: 0.7rem; padding: 0.3rem 0.8rem; top: 0.75rem; }
+      .mapboxgl-popup-content { max-width: 220px; min-width: 180px; }
+      .popup-img { height: 100px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="logo" href="../home/index.html">Wander<span>lust</span></a>
+    <div class="header-right">
+      <div class="status-bar">
+        <div class="status-dot loading" id="status-dot"></div>
+        <span id="status-text">Carregando pontos...</span>
+      </div>
+      <a class="btn-back" href="../home/index.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        Voltar
+      </a>
+    </div>
+  </header>
+
+  <div style="position:relative; flex:1; display:flex;">
+    <div id="map"></div>
+    <div class="map-counter" id="counter" style="opacity:0;">
+      <span id="counter-num">0</span> pontos no mapa
+    </div>
+    <div class="legend">
+      <div class="legend-title">Legenda</div>
+      <div class="legend-item"><div class="legend-pin"></div> Ponto turístico</div>
+      <div class="legend-item"><div class="legend-user"></div> Sua localização</div>
+    </div>
+  </div>
+
+  <script>
+    const MAPBOX_TOKEN = "seu_token_aqui";
+    mapboxgl.accessToken = MAPBOX_TOKEN;
+
+    // Verifica sessão
+    const usuarioSession = sessionStorage.getItem('usuario');
+    if (!usuarioSession) window.location.href = '../login/login.html';
+
+    // Inicia mapa
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/dark-v11',
+      center: [0, 20],
+      zoom: 1.8,
+      projection: 'mercator'
+    });
+
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+    const statusDot = document.getElementById('status-dot');
+    const statusText = document.getElementById('status-text');
+    const counter = document.getElementById('counter');
+    const counterNum = document.getElementById('counter-num');
+
+    function setStatus(state, msg) {
+      statusDot.className = 'status-dot ' + state;
+      statusText.textContent = msg;
+    }
+
+    // Geocoding: converte "cidade, país" em coordenadas via Mapbox
+    async function geocode(query) {
+      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${MAPBOX_TOKEN}&limit=1&types=place,region,country,poi`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.features && data.features.length > 0) {
+        return data.features[0].center; // [lng, lat]
+      }
+      return null;
+    }
+
+    function criarPopup(p) {
+      return `
+        <img class="popup-img" src="${p.imagem}" alt="${p.nome}"
+             onerror="this.style.background='#2a2f42';this.removeAttribute('src')"/>
+        <div class="popup-body">
+          <div class="popup-cat">${p.categoria}</div>
+          <div class="popup-title">${p.nome}</div>
+          <div class="popup-location">${p.cidade}, ${p.pais}</div>
+          <div class="popup-desc">${p.descricao}</div>
+          <div class="popup-stars">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--accent)">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            ${p.avaliacao.toFixed(1)}
+          </div>
+        </div>`;
+    }
+
+    async function carregarPontos() {
+      // Carrega dados do json-server
+      let pontos = [];
+      try {
+        const res = await fetch('http://localhost:3000/pontos_turisticos');
+        pontos = await res.json();
+      } catch (e) {
+        setStatus('error', 'Erro ao conectar com o servidor.');
+        return;
+      }
+
+      setStatus('loading', `Geocodificando ${pontos.length} pontos...`);
+
+      let carregados = 0;
+
+      // Geocoda e adiciona marcadores em paralelo (lotes de 5 pra não sobrecarregar)
+      const chunks = [];
+      for (let i = 0; i < pontos.length; i += 5) chunks.push(pontos.slice(i, i + 5));
+
+      for (const chunk of chunks) {
+        await Promise.all(chunk.map(async (p) => {
+          const query = `${p.cidade}, ${p.pais}`;
+          const coords = await geocode(query);
+          if (!coords) return;
+
+          const [lng, lat] = coords;
+
+          // Marcador customizado
+          const el = document.createElement('div');
+          el.className = 'marker';
+          el.title = p.nome;
+
+          const popup = new mapboxgl.Popup({ offset: 20, closeButton: true, maxWidth: '260px' })
+            .setHTML(criarPopup(p));
+
+          new mapboxgl.Marker(el)
+            .setLngLat([lng, lat])
+            .setPopup(popup)
+            .addTo(map);
+
+          carregados++;
+          counterNum.textContent = carregados;
+          counter.style.opacity = '1';
+          setStatus('loading', `Carregando... (${carregados}/${pontos.length})`);
+        }));
+      }
+
+      setStatus('done', `${carregados} pontos carregados`);
+    }
+
+    // Localização do usuário
+    function localizarUsuario() {
+      if (!navigator.geolocation) return;
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const { latitude: lat, longitude: lng } = pos.coords;
+
+          const el = document.createElement('div');
+          el.className = 'marker-user';
+          el.title = 'Você está aqui';
+
+          new mapboxgl.Marker(el)
+            .setLngLat([lng, lat])
+            .setPopup(new mapboxgl.Popup({ offset: 15 }).setHTML(
+              `<div style="background:var(--card);padding:0.6rem 0.8rem;border-radius:8px;font-size:0.8rem;color:var(--text);font-family:'Inter',sans-serif;">
+                📍 <strong>Você está aqui</strong>
+              </div>`
+            ))
+            .addTo(map);
+        },
+        () => {} // silencia erro de permissão negada
+      );
+    }
+
+    map.on('load', () => {
+      carregarPontos();
+      localizarUsuario();
+    });
+  </script>
+</body>
+</html>
